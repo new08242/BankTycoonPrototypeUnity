@@ -2,6 +2,10 @@
 
 public class GamePlayCameraController : MonoBehaviour
 {
+
+    public GameObject groundPlacementController;
+    private GroundPlacementController gpcScript;
+
     public Transform cameraTransform;
 
     public float normalSpeed;
@@ -11,14 +15,14 @@ public class GamePlayCameraController : MonoBehaviour
     public float rotationAmount;
     public Vector3 zoomAmount;
 
-    public Vector3 newPosition;
-    public Quaternion newRotation;
-    public Vector3 newZoom;
+    private Vector3 newPosition;
+    private Quaternion newRotation;
+    private Vector3 newZoom;
 
-    public Vector3 dragStartPosition;
-    public Vector3 dragCurrentPosition;
-    public Vector3 rotateStartPosition;
-    public Vector3 rotateCurrentPosition;
+    private Vector3 dragStartPosition;
+    private Vector3 dragCurrentPosition;
+    private Vector3 rotateStartPosition;
+    private Vector3 rotateCurrentPosition;
 
 
     // Start is called before the first frame update
@@ -27,6 +31,8 @@ public class GamePlayCameraController : MonoBehaviour
         newPosition = transform.position;
         newRotation = transform.rotation;
         newZoom = cameraTransform.localPosition;
+
+        gpcScript = groundPlacementController.GetComponent<GroundPlacementController>();
     }
 
     // Update is called once per frame
@@ -38,7 +44,7 @@ public class GamePlayCameraController : MonoBehaviour
 
     void HandleMouseInput()
     {
-        if(Input.mouseScrollDelta.y != 0)
+        if(Input.mouseScrollDelta.y != 0 && gpcScript.GetCurrentPlaceableObject() == null)
         {
             newZoom += Input.mouseScrollDelta.y * zoomAmount;
         }
