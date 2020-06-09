@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BuildPanel : MonoBehaviour, IPointerEnterHandler
 {
@@ -9,11 +10,23 @@ public class BuildPanel : MonoBehaviour, IPointerEnterHandler
     public GameObject branchPrefab;
     public GameObject atmPrefab;
 
+    public GameObject atmButton;
+    public GameObject branchButton;
+
     private GroundPlacementController gpcScript;
+    private PlayerBank playerBankScript;
 
     private void Start() {
         groundPlacementController = GameObject.Find("GroundPlacementController");
         gpcScript = groundPlacementController.GetComponent<GroundPlacementController>();
+        playerBankScript = GameObject.Find("PlayerBank").GetComponent<PlayerBank>();
+    }
+
+    private void Update() {
+        if (playerBankScript.GetAbilityByKey(PlayerBankAbility.Build)) {
+            atmButton.GetComponent<Button>().interactable = true;
+            branchButton.GetComponent<Button>().interactable = true;
+        }
     }
 
     public void OnClickClose() {

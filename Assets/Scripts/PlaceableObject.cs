@@ -27,5 +27,23 @@ public class PlaceableObject : MonoBehaviour
     public void Purchase()
     {
         playerBankScript.AddMoney(-price);
+        string name = gameObject.name;
+        name = name.Replace("(Clone)", "");
+        switch (name)
+        {
+        case "ATM":
+            playerBankScript.SetAbility(PlayerBankAbility.ATM, true);
+            playerBankScript.SetAbility(PlayerBankAbility.Account, true);
+            break;
+        case "Branch":
+            playerBankScript.SetAbility(PlayerBankAbility.Account, true);
+            playerBankScript.SetAbility(PlayerBankAbility.Loan, true);
+            break;
+        case "HQ":
+            playerBankScript.SetAbility(PlayerBankAbility.Build, true);
+            break;
+        default:
+            break;
+        }
     }
 }
