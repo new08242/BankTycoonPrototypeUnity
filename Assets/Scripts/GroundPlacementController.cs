@@ -7,8 +7,6 @@ public class GroundPlacementController : MonoBehaviour
     // private GameObject[] placeableObjectPrefabs;
 
     // private GameObject currentPlaceableObject;
-    public GameObject playerBank;
-
     private GameObject currentPlaceableObject;
 
     private float mouseWheelRotation;
@@ -20,7 +18,6 @@ public class GroundPlacementController : MonoBehaviour
 
         if (currentPlaceableObject != null)
         {
-            Debug.Log(currentPlaceableObject.name);
             MoveCurrentObjectToMouse();
             RotateFromMouseWheel();
             ReleaseIfClicked();
@@ -73,7 +70,6 @@ public class GroundPlacementController : MonoBehaviour
 
     private void RotateFromMouseWheel()
     {
-        Debug.Log(Input.mouseScrollDelta);
         mouseWheelRotation += Input.mouseScrollDelta.y;
         currentPlaceableObject.transform.Rotate(Vector3.up, mouseWheelRotation * 10f);
     }
@@ -82,11 +78,26 @@ public class GroundPlacementController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            currentPlaceableObject = null;
+            PlaceableObject placeableObjectScript = currentPlaceableObject.GetComponent<PlaceableObject>();
+            if (placeableObjectScript.IsPlaceable())
+            {
+                placeableObjectScript.Purchase();
+                currentPlaceableObject = null;
+            }
         }
     }
 
     public void SetCurrentPlaceableObject(GameObject placeableObject) {
+        if (placeableObject == null) {
+            Destroy(currentPlaceableObject);
+            currentPlaceableObject = null;
+            return;
+        }
+
+        if (currentPlaceableObject != null) {
+            Destroy(currentPlaceableObject);
+            currentPlaceableObject = null;
+        }
         currentPlaceableObject = Instantiate(placeableObject);
     }
     public GameObject GetCurrentPlaceableObject() {

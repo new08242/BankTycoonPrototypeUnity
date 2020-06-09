@@ -18,4 +18,13 @@ public class PlayerBank : MonoBehaviour
     {
         
     }
+
+    public float GetMoney() {
+        return money;
+    }
+
+    public float AddMoney(float amount) {
+        money += amount;
+        return money;
+    }
 }
