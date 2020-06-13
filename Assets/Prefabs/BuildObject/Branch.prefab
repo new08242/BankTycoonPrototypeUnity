@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 5579098102395295278}
   - component: {fileID: -2424162560053886847}
   m_Layer: 0
-  m_Name: publisher_mobile
-  m_TagString: Untagged
+  m_Name: Branch
+  m_TagString: Branch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -116,8 +116,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead06123326ab4d4ba6af7533d676b23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBank: {fileID: 726742792589931820, guid: bd1ba69a411d7814da94779d97a97ac5,
-    type: 3}
-  playerBankScript: {fileID: 726742792589931818, guid: bd1ba69a411d7814da94779d97a97ac5,
-    type: 3}
   price: 5000000

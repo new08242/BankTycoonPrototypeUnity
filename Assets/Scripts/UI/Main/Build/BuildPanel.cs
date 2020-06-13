@@ -14,16 +14,16 @@ public class BuildPanel : MonoBehaviour, IPointerEnterHandler
     public GameObject branchButton;
 
     private GroundPlacementController gpcScript;
-    private PlayerBank playerBankScript;
+    private Bank playerBankScript;
 
     private void Start() {
         groundPlacementController = GameObject.Find("GroundPlacementController");
         gpcScript = groundPlacementController.GetComponent<GroundPlacementController>();
-        playerBankScript = GameObject.Find("PlayerBank").GetComponent<PlayerBank>();
+        playerBankScript = GameObject.Find("PlayerBank").GetComponent<Bank>();
     }
 
     private void Update() {
-        if (playerBankScript.GetAbilityByKey(PlayerBankAbility.Build)) {
+        if (playerBankScript.GetAbilityByKey(BankAbility.Build)) {
             atmButton.GetComponent<Button>().interactable = true;
             branchButton.GetComponent<Button>().interactable = true;
         }

@@ -9,14 +9,14 @@ public class ResourcePanel : MonoBehaviour
     public Text moneyText;
     public Text updateMoneyText;
 
-    private PlayerBank playerBankScript;
+    private Bank playerBankScript;
     private float currentDisplayMoney;
     private float currentMoney;
     // Start is called before the first frame update
     void Start()
     {
         playerBank = GameObject.Find("PlayerBank");
-        playerBankScript = playerBank.GetComponent<PlayerBank>();
+        playerBankScript = playerBank.GetComponent<Bank>();
         currentMoney = playerBankScript.GetMoney();
         currentDisplayMoney = currentMoney;
     }

@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBank : MonoBehaviour
+public class Bank : MonoBehaviour
 {
     // Resources
     private float money;
     private int atmCount;
     private int branchCount;
+    private float depositMoney;
+
+    // Product
+    private Dictionary<string, AccountProduct> accProducts = new Dictionary<string, AccountProduct>();
+    private Dictionary<string, Account> accounts = new Dictionary<string, Account>();
 
     // Bank abilities
     private Dictionary<string, bool> bankAbilities = new Dictionary<string, bool>();
@@ -17,8 +22,10 @@ public class PlayerBank : MonoBehaviour
     {
         money = 2 * Mathf.Pow(10, 7);
 
-        bankAbilities.Add(PlayerBankAbility.Account, false);
-        bankAbilities.Add(PlayerBankAbility.Loan, false);
+        bankAbilities.Add(BankAbility.Account, false);
+        bankAbilities.Add(BankAbility.Loan, false);
+        bankAbilities.Add(BankAbility.Deposit, false);
+        bankAbilities.Add(BankAbility.Withdraw, false);
     }
 
     // Update is called once per frame
@@ -33,6 +40,14 @@ public class PlayerBank : MonoBehaviour
     public float AddMoney(float amount) {
         money += amount;
         return money;
+    }
+
+    public float GetDepositMoney() {
+        return depositMoney;
+    }
+    public float AddDepositMoney(float amount) {
+        depositMoney += amount;
+        return depositMoney;
     }
 
     public int AddATM(int amount) {
@@ -58,7 +73,6 @@ public class PlayerBank : MonoBehaviour
         }
 
         bankAbilities.Add(ability, flag);
-        Debug.Log("2 bank ability:" + bankAbilities[PlayerBankAbility.Build]);
     }
     public bool GetAbilityByKey(string ability) {
         if (bankAbilities.ContainsKey(ability)) {
@@ -66,5 +80,23 @@ public class PlayerBank : MonoBehaviour
         }
 
         return false;
+    }
+
+    public string AddAccountProduct(AccountProduct product) {
+        if (!accProducts.ContainsKey(product.accProductName)) {
+            accProducts.Add(product.accProductName, product);
+            return "";
+        }
+
+        return "already_exist";
+    }
+
+    public string EditAccoutProduct(AccountProduct product) {
+        if (accProducts.ContainsKey(product.accProductName)) {
+            accProducts[product.accProductName] = product;
+            return "";
+        }
+
+        return "not_exist";
     }
 }

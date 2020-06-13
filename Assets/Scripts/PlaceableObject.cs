@@ -3,14 +3,14 @@
 public class PlaceableObject : MonoBehaviour
 {
     private GameObject playerBank;
-    private PlayerBank playerBankScript;
+    private Bank playerBankScript;
 
     // object attributes
     public float price;
 
     private void Start() {
         playerBank = GameObject.Find("PlayerBank");
-        playerBankScript = playerBank.GetComponent<PlayerBank>();
+        playerBankScript = playerBank.GetComponent<Bank>();
     }
 
     public bool IsPlaceable() 
@@ -32,15 +32,16 @@ public class PlaceableObject : MonoBehaviour
         switch (name)
         {
         case "ATM":
-            playerBankScript.SetAbility(PlayerBankAbility.ATM, true);
-            playerBankScript.SetAbility(PlayerBankAbility.Account, true);
+            playerBankScript.SetAbility(BankAbility.ATM, true);
+            playerBankScript.SetAbility(BankAbility.Account, true);
             break;
         case "Branch":
-            playerBankScript.SetAbility(PlayerBankAbility.Account, true);
-            playerBankScript.SetAbility(PlayerBankAbility.Loan, true);
+            playerBankScript.SetAbility(BankAbility.Account, true);
+            playerBankScript.SetAbility(BankAbility.Loan, true);
             break;
         case "HQ":
-            playerBankScript.SetAbility(PlayerBankAbility.Build, true);
+            playerBankScript.SetAbility(BankAbility.Build, true);
+            playerBankScript.SetAbility(BankAbility.Product, true);
             break;
         default:
             break;

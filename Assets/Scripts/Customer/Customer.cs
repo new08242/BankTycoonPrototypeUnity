@@ -8,7 +8,7 @@ public class Customer : MonoBehaviour
     public RuntimeAnimatorController IdleAmination;
     public RuntimeAnimatorController WalkAnimation;
     
-    private PlayerBank playerBankScript;
+    private Bank playerBankScript;
     private Animator animator;
     private GameObject nearestBank;
     private GameObject nearestATM;
@@ -26,9 +26,9 @@ public class Customer : MonoBehaviour
         animator.runtimeAnimatorController = IdleAmination;
 
         leavePos = GameObject.Find("CustomerLeavePosition").transform.position;
-        nearestBank = GameObject.Find("Branch");
-        nearestATM = GameObject.Find("ATM");
-        playerBankScript = GameObject.Find("PlayerBank").GetComponent<PlayerBank>();
+        nearestBank = GameObject.FindGameObjectWithTag("Branch");
+        nearestATM = GameObject.FindGameObjectWithTag("ATM");
+        playerBankScript = GameObject.Find("PlayerBank").GetComponent<Bank>();
     }
 
     // Update is called once per frame
@@ -69,11 +69,10 @@ public class Customer : MonoBehaviour
     // and made destination dynamic in list and random within the list
     void DecideDeposit() {
         // decide deposit
-        if (playerBankScript.GetAbilityByKey(PlayerBankAbility.Account)) {
+        if (playerBankScript.GetAbilityByKey(BankAbility.Deposit)) {
             // TODO: refactor this part to be dynamic
             float randResult = Random.Range(1, 3);
             int randResultInt = (int)randResult;
-            Debug.Log("[Deposit] randResultInt : " + randResultInt);
 
             if (randResultInt == 1) {
                 if (nearestBank != null) {
@@ -94,6 +93,7 @@ public class Customer : MonoBehaviour
 
             previousState = state;
             state = CustomerState.DepositState;
+            return;
         }
 
         // can't do deposit bank lack the ability
@@ -125,12 +125,9 @@ public class Customer : MonoBehaviour
     }
 
     IEnumerator WaitForSecThenLeave(int sec) {
-        Debug.Log("Started Coroutine at timestamp : " + Time.time);
         state = CustomerState.WaitToLeaveState;
 
         yield return new WaitForSeconds(sec);
-
-        Debug.Log("Finished WaitForSeconds at timestamp : " + Time.time);
 
         state = CustomerState.LeaveState;
     }

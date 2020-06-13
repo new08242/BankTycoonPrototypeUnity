@@ -7,11 +7,11 @@ public class CustomerController : MonoBehaviour
     public GameObject customer;
     public GameObject spawnPointPos;
 
-    private PlayerBank playerBank;
+    private Bank playerBank;
     // Start is called before the first frame update
     void Start()
     {
-        playerBank = GameObject.Find("PlayerBank").GetComponent<PlayerBank>();
+        playerBank = GameObject.Find("PlayerBank").GetComponent<Bank>();
         StartCoroutine(SpawnCustomerWithStateEveryBySec(2.0f)); 
     }
 
