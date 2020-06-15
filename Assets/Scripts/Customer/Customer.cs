@@ -8,7 +8,6 @@ public class Customer : MonoBehaviour
     public RuntimeAnimatorController IdleAmination;
     public RuntimeAnimatorController WalkAnimation;
     
-    private Bank playerBankScript;
     private Animator animator;
     private GameObject nearestBank;
     private GameObject nearestATM;
@@ -19,6 +18,9 @@ public class Customer : MonoBehaviour
     // Deposit state
     private Vector3 depositDestination;
 
+    // Loan state
+    private Vector3 loanDestination;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,6 @@ public class Customer : MonoBehaviour
         leavePos = GameObject.Find("CustomerLeavePosition").transform.position;
         nearestBank = GameObject.FindGameObjectWithTag("Branch");
         nearestATM = GameObject.FindGameObjectWithTag("ATM");
-        playerBankScript = GameObject.Find("PlayerBank").GetComponent<Bank>();
     }
 
     // Update is called once per frame
@@ -69,7 +70,7 @@ public class Customer : MonoBehaviour
     // and made destination dynamic in list and random within the list
     void DecideDeposit() {
         // decide deposit
-        if (playerBankScript.GetAbilityByKey(BankAbility.Deposit)) {
+        if (Bank.Instance.GetAbilityByKey(BankAbility.Deposit)) {
             // TODO: refactor this part to be dynamic
             float randResult = Random.Range(1, 3);
             int randResultInt = (int)randResult;
@@ -105,7 +106,8 @@ public class Customer : MonoBehaviour
         navMeshAgent.SetDestination(depositDestination);
         if (Mathf.Abs(gameObject.transform.position.x - depositDestination.x) <= 0.1) {
             float randResult = Random.Range(1000, 30000);
-            playerBankScript.AddMoney(randResult);
+            Bank.Instance.AddMoney(randResult);
+            Bank.Instance.AddCustomerMoney(randResult);
 
             previousState = state;
             state = CustomerState.IdelState;
@@ -113,11 +115,29 @@ public class Customer : MonoBehaviour
     }
 
     void Withdraw() {
+        animator.runtimeAnimatorController = WalkAnimation;
+        navMeshAgent.SetDestination(depositDestination);
+        if (Mathf.Abs(gameObject.transform.position.x - depositDestination.x) <= 0.1) {
+            float randResult = Random.Range(1000, 30000);
+            Bank.Instance.AddMoney(-randResult);
+            Bank.Instance.AddCustomerMoney(-randResult);
 
+            previousState = state;
+            state = CustomerState.IdelState;
+        }
     }
 
     void Loan() {
+        animator.runtimeAnimatorController = WalkAnimation;
+        navMeshAgent.SetDestination(depositDestination);
+        if (Mathf.Abs(gameObject.transform.position.x - depositDestination.x) <= 0.1) {
+            float randResult = Random.Range(10000, 300000);
+            Bank.Instance.AddMoney(-randResult);
+            Bank.Instance.AddCustomerDebt(-randResult);
 
+            previousState = state;
+            state = CustomerState.IdelState;
+        }
     }
 
     void PayLoan() {

@@ -6,9 +6,10 @@ public class Bank : MonoBehaviour
 {
     // Resources
     private float money;
+    private float customerMoney;
+    private float customerDebt;
     private int atmCount;
     private int branchCount;
-    private float depositMoney;
 
     // Product
     private Dictionary<string, AccountProduct> accProducts = new Dictionary<string, AccountProduct>();
@@ -16,6 +17,21 @@ public class Bank : MonoBehaviour
 
     // Bank abilities
     private Dictionary<string, bool> bankAbilities = new Dictionary<string, bool>();
+
+    // Singleton instance
+    public static Bank Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +47,11 @@ public class Bank : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // foreach(var ab in bankAbilities) {
+        //     Debug.Log("ability: " + ab.Key + "bool: " + ab.Value);
+        // }
+
+        CalculateExpense();
     }
 
     public float GetMoney() {
@@ -42,12 +62,20 @@ public class Bank : MonoBehaviour
         return money;
     }
 
-    public float GetDepositMoney() {
-        return depositMoney;
+    public float GetCustomerMoney() {
+        return customerMoney;
     }
-    public float AddDepositMoney(float amount) {
-        depositMoney += amount;
-        return depositMoney;
+    public float AddCustomerMoney(float amount) {
+        customerMoney += amount;
+        return customerMoney;
+    }
+
+    public float GetCustomerDebt() {
+        return customerDebt;
+    }
+    public float AddCustomerDebt(float amount) {
+        customerDebt += amount;
+        return customerDebt;
     }
 
     public int AddATM(int amount) {
@@ -90,6 +118,9 @@ public class Bank : MonoBehaviour
 
         return "already_exist";
     }
+    public Dictionary<string, AccountProduct> GetAccountProduct() {
+        return accProducts;
+    }
 
     public string EditAccoutProduct(AccountProduct product) {
         if (accProducts.ContainsKey(product.accProductName)) {
@@ -98,5 +129,9 @@ public class Bank : MonoBehaviour
         }
 
         return "not_exist";
+    }
+
+    void CalculateExpense() {
+
     }
 }

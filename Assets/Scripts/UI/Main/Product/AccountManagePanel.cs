@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class AccountManagePanel : MonoBehaviour
@@ -6,28 +7,19 @@ public class AccountManagePanel : MonoBehaviour
     public GameObject productMenuPanel;
     public GameObject accountMenuPanel;
     public GameObject createPanel;
+    public GameObject listPanel;
 
     // Create Panel Component
     public Dropdown accountTypeDropDown;
     public InputField nameInput;
     public InputField interestRateInput;
+    public GameObject createLog;
 
     // List Panel Component
-    public Text accountProductListDetail;
-
-    private Bank playerBankScript;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerBankScript = GameObject.Find("PlayerBank").GetComponent<Bank>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Text No;
+    public Text Name;
+    public Text Interest;
+    public Text TotalAccount;
 
     public void OnClickClose() {
         gameObject.SetActive(false);
@@ -50,11 +42,46 @@ public class AccountManagePanel : MonoBehaviour
 
         
         AccountProduct accPro = new AccountProduct(type, interestRate, nameInput.text);
-        playerBankScript.AddAccountProduct(accPro);
-        playerBankScript.SetAbility(BankAbility.Deposit, true);
+        Bank.Instance.AddAccountProduct(accPro);
+        Bank.Instance.SetAbility(BankAbility.Deposit, true);
+        createLog.SetActive(true);
+        StartCoroutine(WaitForSecThenInactive(1));
+    }
+    IEnumerator WaitForSecThenInactive(int sec) {
+        yield return new WaitForSeconds(sec);
+        createLog.SetActive(false);
     }
 
     public void OnClickListMenu() {
-        accountProductListDetail.text = "";
+        No.text = "";
+        Name.text = "";
+        Interest.text = "";
+        TotalAccount.text = "";
+
+        listPanel.SetActive(true);
+        accountMenuPanel.SetActive(false);
+
+        int num = 0;
+        if (Bank.Instance.GetAccountProduct().Count < 1) {
+            return;
+        }
+        foreach(var product in Bank.Instance.GetAccountProduct()) {
+            num++;
+            No.text += num.ToString() + ".";
+            No.text += "\n";
+
+            Name.text += product.Value.accProductName;
+            Name.text += "\n";
+
+            Interest.text += product.Value.interestRate.ToString("n2") + "%";
+            Interest.text += "\n";
+
+            TotalAccount.text += product.Value.count.ToString();
+            TotalAccount.text += "\n";  
+        }
+    }
+    public void OnClickCloseListPanel() {
+        listPanel.SetActive(false);
+        accountMenuPanel.SetActive(true);
     }
 }

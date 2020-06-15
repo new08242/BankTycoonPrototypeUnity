@@ -8,6 +8,7 @@ public class AccountProduct
     public float interestRate;
     public string accProductName;
     public string status;
+    public int count;
 
     public AccountProduct(string type, float interestRate, string name) {
         this.type = type;

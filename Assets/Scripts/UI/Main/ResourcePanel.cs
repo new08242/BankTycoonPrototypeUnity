@@ -5,19 +5,28 @@ using UnityEngine.UI;
 
 public class ResourcePanel : MonoBehaviour
 {
-    public GameObject playerBank;
     public Text moneyText;
     public Text updateMoneyText;
 
-    private Bank playerBankScript;
+    public Text customerMoneyText;
+    public Text updateCustomerMoneyText;
+
+    public Text customerDebtText;
+    public Text updateCustomerDebtText;
+
     private float currentDisplayMoney;
     private float currentMoney;
+
+    private float currentDisplayCustomerMoney;
+    private float currentCustomerMoney;
+
+    private float currentDisplayCustomerDebt;
+    private float currentCustomerDebt;
+
     // Start is called before the first frame update
     void Start()
     {
-        playerBank = GameObject.Find("PlayerBank");
-        playerBankScript = playerBank.GetComponent<Bank>();
-        currentMoney = playerBankScript.GetMoney();
+        currentMoney = Bank.Instance.GetMoney();
         currentDisplayMoney = currentMoney;
     }
 
@@ -28,29 +37,36 @@ public class ResourcePanel : MonoBehaviour
     }
 
     private void UpdateCurrentMoney() {
-        currentMoney = playerBankScript.GetMoney();
+        currentMoney = Bank.Instance.GetMoney();
+        currentCustomerMoney = Bank.Instance.GetCustomerMoney();
+        currentCustomerDebt = Bank.Instance.GetCustomerDebt();
+
         moneyText.text = "฿ " + currentMoney.ToString("n2");
+        customerMoneyText.text = "฿ " + currentCustomerMoney.ToString("n2");
+        customerDebtText.text = "฿ " + currentCustomerDebt.ToString("n2");
 
-        ShowUpdateMoney();
-
-        currentDisplayMoney = currentMoney;
+        currentDisplayMoney = ShowUpdateMoney(currentDisplayMoney, currentMoney, updateMoneyText);
+        currentDisplayCustomerMoney = ShowUpdateMoney(currentDisplayCustomerMoney, currentCustomerMoney, updateCustomerMoneyText);
+        currentDisplayCustomerDebt = ShowUpdateMoney(currentDisplayCustomerDebt, currentCustomerDebt, updateCustomerDebtText);
     }
 
-    private void ShowUpdateMoney() {
-        if (currentDisplayMoney != currentMoney)
+    private float ShowUpdateMoney(float currentDisplay, float currentMoney , Text textDisplay) {
+        if (currentDisplay != currentMoney)
         {
-            updateMoneyText.gameObject.SetActive(true);
+            textDisplay.gameObject.SetActive(true);
 
-            if (currentDisplayMoney > currentMoney)
+            if (currentDisplay > currentMoney)
             {
-                updateMoneyText.color = Color.red;
-                updateMoneyText.text = "-฿ " + (currentDisplayMoney - currentMoney).ToString("n2");
+                textDisplay.color = Color.red;
+                textDisplay.text = "-฿ " + (currentDisplay - currentMoney).ToString("n2");
             }
             else
             {
-                updateMoneyText.color = Color.green;
-                updateMoneyText.text = "+฿ " + (currentMoney - currentDisplayMoney).ToString("n2");
+                textDisplay.color = Color.green;
+                textDisplay.text = "+฿ " + (currentMoney - currentDisplay).ToString("n2");
             }
         }
+        currentDisplay = currentMoney;
+        return currentDisplay;
     }
 }

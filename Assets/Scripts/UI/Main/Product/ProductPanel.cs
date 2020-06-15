@@ -12,19 +12,20 @@ public class ProductPanel : MonoBehaviour
     public GameObject accountButton;
     public GameObject loanButton;
 
-    private Bank playerBankScript;
-
     // Start is called before the first frame update
     void Start()
     {
-        playerBankScript = GameObject.Find("PlayerBank").GetComponent<Bank>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-       if (playerBankScript.GetAbilityByKey(BankAbility.Product)) {
+        if (Bank.Instance.GetAbilityByKey(BankAbility.Product) && Bank.Instance.GetAbilityByKey(BankAbility.Account)) {
             accountButton.GetComponent<Button>().interactable = true;
+        }
+
+        if (Bank.Instance.GetAbilityByKey(BankAbility.Product) && Bank.Instance.GetAbilityByKey(BankAbility.Loan)) {
             loanButton.GetComponent<Button>().interactable = true;
         }
     }
