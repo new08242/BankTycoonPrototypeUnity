@@ -15,7 +15,7 @@ public class UpdateMoneyText : MonoBehaviour
         alphaColor.a = 0;
     }
 
-    private void OnEnable() {
+    public void SetFade() {
         Isfade = true;
         alphaColor = gameObject.GetComponent<Text>().color;
         alphaColor.a = 0;
@@ -30,7 +30,7 @@ public class UpdateMoneyText : MonoBehaviour
             gameObject.GetComponent<Text>().color = Color.Lerp(gameObject.GetComponent<Text>().color, alphaColor, timeToFade * Time.deltaTime);
 
             // complete fade
-            if (gameObject.GetComponent<Text>().color.a < 0.05) {
+            if (gameObject.GetComponent<Text>().color.a < 0.1) {
                 Isfade = false;
                 gameObject.SetActive(false);
             }

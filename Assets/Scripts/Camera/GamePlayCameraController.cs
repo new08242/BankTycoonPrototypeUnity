@@ -38,8 +38,10 @@ public class GamePlayCameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HandleMovementInput();
-        HandleMouseInput();
+        if (Bank.Instance.GetMouseState() == MouseState.CameraControl) {
+            HandleMovementInput();
+            HandleMouseInput();
+        }
     }
 
     void HandleMouseInput()

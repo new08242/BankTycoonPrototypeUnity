@@ -53,8 +53,6 @@ public class ResourcePanel : MonoBehaviour
     private float ShowUpdateMoney(float currentDisplay, float currentMoney , Text textDisplay) {
         if (currentDisplay != currentMoney)
         {
-            textDisplay.gameObject.SetActive(true);
-
             if (currentDisplay > currentMoney)
             {
                 textDisplay.color = Color.red;
@@ -65,6 +63,9 @@ public class ResourcePanel : MonoBehaviour
                 textDisplay.color = Color.green;
                 textDisplay.text = "+฿ " + (currentMoney - currentDisplay).ToString("n2");
             }
+
+            textDisplay.GetComponent<UpdateMoneyText>().SetFade();
+            textDisplay.gameObject.SetActive(true);
         }
         currentDisplay = currentMoney;
         return currentDisplay;

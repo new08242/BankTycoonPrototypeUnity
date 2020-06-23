@@ -4,16 +4,26 @@ using UnityEngine;
 
 public class Bank : MonoBehaviour
 {
+    // Player
+    private string mouseState;
+
     // Resources
     private float money;
     private float customerMoney;
     private float customerDebt;
     private int atmCount;
     private int branchCount;
+    private float monthlyExpense;
 
     // Product
-    private Dictionary<string, AccountProduct> accProducts = new Dictionary<string, AccountProduct>();
-    private Dictionary<string, Account> accounts = new Dictionary<string, Account>();
+    public Dictionary<string, AccountProduct> accProducts = new Dictionary<string, AccountProduct>();
+    public Dictionary<string, Account> accounts = new Dictionary<string, Account>();
+    public int accountCount = 0;
+    public int accPrdCount = 0;
+
+    private Dictionary<string, LoanProduct> loanProducts = new Dictionary<string, LoanProduct>();
+    private Dictionary<string, Loan> loans = new Dictionary<string, Loan>();
+    private int contractCount = 0;
 
     // Bank abilities
     private Dictionary<string, bool> bankAbilities = new Dictionary<string, bool>();
@@ -36,6 +46,7 @@ public class Bank : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        mouseState = MouseState.CameraControl;
         money = 2 * Mathf.Pow(10, 7);
 
         bankAbilities.Add(BankAbility.Account, false);
@@ -52,6 +63,14 @@ public class Bank : MonoBehaviour
         // }
 
         CalculateExpense();
+    }
+
+    public string GetMouseState() {
+        return mouseState;
+    }
+    public string SetMouseState(string mstate) {
+        mouseState = mstate;
+        return mouseState;
     }
 
     public float GetMoney() {
@@ -94,6 +113,7 @@ public class Bank : MonoBehaviour
         return branchCount;
     }
 
+    // bank ability
     public void SetAbility(string ability, bool flag) {
         if (bankAbilities.ContainsKey(ability)) {
             bankAbilities[ability] = flag;
@@ -110,9 +130,10 @@ public class Bank : MonoBehaviour
         return false;
     }
 
+    // Account
     public string AddAccountProduct(AccountProduct product) {
         if (!accProducts.ContainsKey(product.accProductName)) {
-            accProducts.Add(product.accProductName, product);
+            accProducts.Add(Bank.Instance.accPrdCount.ToString(), product);
             return "";
         }
 
@@ -121,7 +142,6 @@ public class Bank : MonoBehaviour
     public Dictionary<string, AccountProduct> GetAccountProduct() {
         return accProducts;
     }
-
     public string EditAccoutProduct(AccountProduct product) {
         if (accProducts.ContainsKey(product.accProductName)) {
             accProducts[product.accProductName] = product;
@@ -130,8 +150,38 @@ public class Bank : MonoBehaviour
 
         return "not_exist";
     }
+    public Error AddAccount(Account acc) {
+        if (!accProducts.ContainsKey(acc.accountProduct.accProductName)) {
+            return ErrorList.NotFound;
+        }
+        
+        accounts.Add(acc.accountNo, acc);
+
+        return ErrorList.Success;
+    }
+
+    // Loan
+    public string AddLoanProduct(LoanProduct product) {
+        if (!loanProducts.ContainsKey(product.loanName)) {
+            loanProducts.Add(product.loanName, product);
+            return "";
+        }
+
+        return "already_exist";
+    }
+    public Dictionary<string, LoanProduct> GetLoanProduct() {
+        return loanProducts;
+    }
+    public string EditLoanProduct(LoanProduct product) {
+        if (loanProducts.ContainsKey(product.loanName)) {
+            loanProducts[product.loanName] = product;
+            return "";
+        }
+
+        return "not_exist";
+    }
 
     void CalculateExpense() {
-
+        
     }
 }

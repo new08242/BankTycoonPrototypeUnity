@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LoanManagePanel : MonoBehaviour
+public class NewBehaviourScript : MonoBehaviour
 {
-    public GameObject productMenuPanel;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -16,10 +14,5 @@ public class LoanManagePanel : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public void OnClickClose() {
-        gameObject.SetActive(false);
-        productMenuPanel.SetActive(true);
     }
 }

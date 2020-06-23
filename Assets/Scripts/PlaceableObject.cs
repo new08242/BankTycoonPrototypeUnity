@@ -3,19 +3,14 @@
 public class PlaceableObject : MonoBehaviour
 {
     private GameObject playerBank;
-    private Bank playerBankScript;
 
     // object attributes
     public float price;
-
-    private void Start() {
-        playerBank = GameObject.Find("PlayerBank");
-        playerBankScript = playerBank.GetComponent<Bank>();
-    }
+    public float monthlyExpense;
 
     public bool IsPlaceable() 
     {
-        float currentMoney = playerBankScript.GetMoney();
+        float currentMoney = Bank.Instance.GetMoney();
         if (currentMoney < price)
         {
             return false;
@@ -26,22 +21,26 @@ public class PlaceableObject : MonoBehaviour
 
     public void Purchase()
     {
-        playerBankScript.AddMoney(-price);
+        Bank.Instance.AddMoney(-price);
         string name = gameObject.name;
         name = name.Replace("(Clone)", "");
         switch (name)
         {
         case "ATM":
-            playerBankScript.SetAbility(BankAbility.ATM, true);
-            playerBankScript.SetAbility(BankAbility.Account, true);
+            Bank.Instance.SetAbility(BankAbility.ATM, true);
+            Bank.Instance.SetAbility(BankAbility.Account, true);
             break;
         case "Branch":
-            playerBankScript.SetAbility(BankAbility.Account, true);
-            playerBankScript.SetAbility(BankAbility.Loan, true);
+            Bank.Instance.SetAbility(BankAbility.Account, true);
+            Bank.Instance.SetAbility(BankAbility.Loan, true);
+
+            // auto create basic loan
+            LoanProduct lp = new LoanProduct("BasicLoan", 10000f, 300000f, 10f);
+            Bank.Instance.AddLoanProduct(lp);
             break;
         case "HQ":
-            playerBankScript.SetAbility(BankAbility.Build, true);
-            playerBankScript.SetAbility(BankAbility.Product, true);
+            Bank.Instance.SetAbility(BankAbility.Build, true);
+            Bank.Instance.SetAbility(BankAbility.Product, true);
             break;
         default:
             break;

@@ -1,16 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class AccountProduct
+﻿public class AccountProduct
 {
     public string type;
     public float interestRate;
     public string accProductName;
     public string status;
     public int count;
+    public string id;
 
-    public AccountProduct(string type, float interestRate, string name) {
+    public AccountProduct(string type, float interestRate, string name, string id) {
+        this.id = id;
         this.type = type;
         this.interestRate = interestRate;
         this.accProductName = name;

@@ -4,55 +4,74 @@ using UnityEngine;
 
 public class CustomerController : MonoBehaviour
 {
+    public int population;
     public GameObject customer;
     public GameObject spawnPointPos;
 
-    private Bank playerBank;
+    public static CustomerController Instance {get; private set;}
+
+    private struct StateToAssign {
+        public string state;
+        public string nextState;
+    }
+
+    void Awake() {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        playerBank = GameObject.Find("PlayerBank").GetComponent<Bank>();
-        StartCoroutine(SpawnCustomerWithStateEveryBySec(2.0f)); 
+        StartCoroutine(SpawnCustomerWithStateEveryBySec(2.0f));
     }
 
     IEnumerator SpawnCustomerWithStateEveryBySec(float sec) {
         GameObject newCust = Instantiate(customer);
         newCust.transform.position = spawnPointPos.transform.position;
         Customer custScript = newCust.GetComponent<Customer>();
-        custScript.SetState(RandomCustomerState());
+
+        StateToAssign stateToAssign = RandomCustomerState();
+        custScript.SetState(stateToAssign.state);
+        custScript.nextState = stateToAssign.nextState;
 
         yield return new WaitForSeconds(sec);
 
         StartCoroutine(SpawnCustomerWithStateEveryBySec(sec));
     }
 
-    private string RandomCustomerState() {
-        string state = "";
-        float randResult = Random.Range(1, 5);
-
-        int randResultInt = (int)randResult;
-
-        switch (randResultInt)
+    private StateToAssign RandomCustomerState() {
+        StateToAssign stateToAssign = new StateToAssign();
+        int randResult = Random.Range(1, 5);
+        Debug.Log("rand state result:" + randResult);
+        switch (randResult)
         {
         case 1:
-            state = CustomerState.DecideDepositState;
+            stateToAssign.state = CustomerState.DecideBankDestinationState;
+            stateToAssign.nextState = CustomerState.DepositState;
             break;
         case 2:
-            state = CustomerState.WithdrawState;
+            stateToAssign.state = CustomerState.DecideBankDestinationState;
+            stateToAssign.nextState = CustomerState.WithdrawState;
             break;
         case 3:
-            state = CustomerState.LoanState;
+            stateToAssign.state = CustomerState.DecideLoanDestinationState;
+            stateToAssign.nextState = CustomerState.LoanState;
             break;
         case 4:
-            state = CustomerState.PayLoanState;
+            stateToAssign.state = CustomerState.DecideLoanDestinationState;
+            stateToAssign.nextState = CustomerState.PayLoanState;
             break;
         default:
             break;
         }
 
-        // hard code for testing
-        state = CustomerState.DecideDepositState;
-
-        return state;
+        return stateToAssign;
     }
 }

@@ -13,5 +13,6 @@ public class MainPanel : MonoBehaviour
     public void OnClickProduct() {
         gameObject.SetActive(false);
         productPanel.SetActive(true);
+        Bank.Instance.SetMouseState(MouseState.UIControl);
     }
 }

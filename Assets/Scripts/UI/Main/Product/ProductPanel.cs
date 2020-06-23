@@ -12,12 +12,6 @@ public class ProductPanel : MonoBehaviour
     public GameObject accountButton;
     public GameObject loanButton;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -33,6 +27,7 @@ public class ProductPanel : MonoBehaviour
     public void OnClickClose() {
         gameObject.SetActive(false);
         mainPanel.SetActive(true);
+        Bank.Instance.SetMouseState(MouseState.CameraControl);
     }
 
     public void OnClickAccount() {
