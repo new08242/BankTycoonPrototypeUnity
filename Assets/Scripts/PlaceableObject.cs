@@ -35,7 +35,8 @@ public class PlaceableObject : MonoBehaviour
             Bank.Instance.SetAbility(BankAbility.Loan, true);
 
             // auto create basic loan
-            LoanProduct lp = new LoanProduct("BasicLoan", 10000f, 300000f, 10f);
+            Bank.Instance.loanPrdCount++;
+            LoanProduct lp = new LoanProduct("BasicLoan", 10000f, 300000f, 10f, Bank.Instance.loanPrdCount.ToString());
             Bank.Instance.AddLoanProduct(lp);
             break;
         case "HQ":

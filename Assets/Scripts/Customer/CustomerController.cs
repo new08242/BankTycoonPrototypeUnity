@@ -48,8 +48,7 @@ public class CustomerController : MonoBehaviour
 
     private StateToAssign RandomCustomerState() {
         StateToAssign stateToAssign = new StateToAssign();
-        int randResult = Random.Range(1, 5);
-        Debug.Log("rand state result:" + randResult);
+        int randResult = Random.Range(1, 4);
         switch (randResult)
         {
         case 1:

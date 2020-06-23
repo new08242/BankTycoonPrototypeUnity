@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class Loan
 {
     public LoanProduct loanProduct;
@@ -6,6 +8,7 @@ public class Loan
     public float badDebtRisk;
     public float amount;
     public string status;
+    public GameObject contractUI;
 
     public Loan(LoanProduct loanProduct, int startDay, int payDay, float badDebtRisk, float amount) {
         this.loanProduct = loanProduct;

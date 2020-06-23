@@ -21,9 +21,10 @@ public class Bank : MonoBehaviour
     public int accountCount = 0;
     public int accPrdCount = 0;
 
-    private Dictionary<string, LoanProduct> loanProducts = new Dictionary<string, LoanProduct>();
-    private Dictionary<string, Loan> loans = new Dictionary<string, Loan>();
-    private int contractCount = 0;
+    public Dictionary<string, LoanProduct> loanProducts = new Dictionary<string, LoanProduct>();
+    public List<Loan> loans = new List<Loan>();
+    public int contractCount = 0;
+    public int loanPrdCount = 0;
 
     // Bank abilities
     private Dictionary<string, bool> bankAbilities = new Dictionary<string, bool>();
@@ -163,7 +164,7 @@ public class Bank : MonoBehaviour
     // Loan
     public string AddLoanProduct(LoanProduct product) {
         if (!loanProducts.ContainsKey(product.loanName)) {
-            loanProducts.Add(product.loanName, product);
+            loanProducts.Add(product.id, product);
             return "";
         }
 

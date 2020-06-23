@@ -123,6 +123,7 @@ public class Customer : MonoBehaviour
         navMeshAgent.SetDestination(bankATMDestination);
         if (Mathf.Abs(gameObject.transform.position.x - bankATMDestination.x) <= 0.1) {
 
+            // create bank account
             int randAmount = Random.Range(1000, 30001);
             int randAccPrd = Random.Range(1, Bank.Instance.GetAccountProduct().Count);
             Account acc = new Account(Bank.Instance.GetAccountProduct()[randAccPrd.ToString()], custName, randAmount);
@@ -181,9 +182,23 @@ public class Customer : MonoBehaviour
         navMeshAgent.SetDestination(loanDestination);
         if (Mathf.Abs(gameObject.transform.position.x - loanDestination.x) <= 0.1) {
             
-            float randResult = Random.Range(10000, 300001);
-            Bank.Instance.AddMoney(-randResult);
-            Bank.Instance.AddCustomerDebt(randResult);
+            int randAmount = Random.Range(10000, 300001);
+            // Bank.Instance.AddMoney(-randAmount);
+            // Bank.Instance.AddCustomerDebt(randAmount);
+
+            // create loan contract
+            int randLoanPrd = Random.Range(1, Bank.Instance.loanProducts.Count);
+
+            int randPayDay = Random.Range(15, 61);
+            float stDay = TimeSystem.Instance.currentTime;
+            float payDay = TimeSystem.Instance.currentTime + randPayDay;
+
+            int randBadDepRisk = Random.Range(1, 11);
+
+            Loan loan = new Loan(Bank.Instance.loanProducts[randLoanPrd.ToString()], (int)stDay, (int)payDay, randBadDepRisk, randAmount);
+            loan.contractUI = ContractManager.Instance.CreateContractUI();
+            Bank.Instance.loans.Add(loan);
+            Bank.Instance.loanProducts[randLoanPrd.ToString()].totalContract++;
 
             previousState = state;
             state = CustomerState.IdelState;
