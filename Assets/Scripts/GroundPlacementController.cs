@@ -20,7 +20,7 @@ public class GroundPlacementController : MonoBehaviour
         {
             MoveCurrentObjectToMouse();
             RotateFromMouseWheel();
-            ReleaseIfClicked();
+            // ReleaseIfClicked();
         }
     }
 
@@ -65,6 +65,16 @@ public class GroundPlacementController : MonoBehaviour
         {
             currentPlaceableObject.transform.position = hitInfo.point;
             currentPlaceableObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+            
+            if (Input.GetMouseButtonDown(0))
+            {
+                PlaceableObject placeableObjectScript = currentPlaceableObject.GetComponent<PlaceableObject>();
+                if (placeableObjectScript.IsPlaceable() && hitInfo.transform.gameObject.layer == 8)
+                {
+                    placeableObjectScript.Purchase();
+                    currentPlaceableObject = null;
+                }
+            }
         }
     }
 
@@ -74,18 +84,18 @@ public class GroundPlacementController : MonoBehaviour
         currentPlaceableObject.transform.Rotate(Vector3.up, mouseWheelRotation * 10f);
     }
 
-    private void ReleaseIfClicked()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            PlaceableObject placeableObjectScript = currentPlaceableObject.GetComponent<PlaceableObject>();
-            if (placeableObjectScript.IsPlaceable())
-            {
-                placeableObjectScript.Purchase();
-                currentPlaceableObject = null;
-            }
-        }
-    }
+    // private void ReleaseIfClicked()
+    // {
+    //     if (Input.GetMouseButtonDown(0))
+    //     {
+    //         PlaceableObject placeableObjectScript = currentPlaceableObject.GetComponent<PlaceableObject>();
+    //         if (placeableObjectScript.IsPlaceable())
+    //         {
+    //             placeableObjectScript.Purchase();
+    //             currentPlaceableObject = null;
+    //         }
+    //     }
+    // }
 
     public void SetCurrentPlaceableObject(GameObject placeableObject) {
         if (placeableObject == null) {

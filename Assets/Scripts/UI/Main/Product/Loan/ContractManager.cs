@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,13 +36,11 @@ public class ContractManager : MonoBehaviour
         startPos = baseContractGObj.transform.localPosition;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        UpdateContractList();
+    void Update() {
+        SettleLoanContract();
     }
 
-    void UpdateContractList() {
+    public void UpdateContractList() {
         if (Bank.Instance.loans.Count < 1) {
             return;
         }
@@ -80,18 +77,66 @@ public class ContractManager : MonoBehaviour
 
             // set next start pos;
             pos.x += 200;
-
-            // set detail to contract
-            Text contractText = contract.contractUI.transform.GetChild(0).GetComponent<Text>();
-            
         }
     }
 
-    public GameObject CreateContractUI() {
+    public GameObject CreateContractUI(Loan loan) {
         GameObject c = Instantiate(contractPrefab);
         c.transform.SetParent(content.transform, false);
         c.transform.localPosition = startPos;
+        c.name = (Bank.Instance.loanRunningID).ToString();
+
+        // set detail to contract
+        Text contractText = c.transform.GetChild(0).GetComponent<Text>();
+        contractText.text = "";
+        contractText.text += string.Format("Name: {0} \n", loan.loanProduct.loanName);
+        contractText.text += string.Format("Amount: {0} \n", loan.amount);
+        contractText.text += string.Format("Duration: {0} \n", loan.duration);
+        contractText.text += string.Format("Interest rate: {0} \n", loan.interestRate);
+        contractText.text += string.Format("Bad debt risk: {0} \n\n", loan.badDebtRisk);
+        contractText.text += string.Format("Status: {0} \n", loan.status);
 
         return c;
+    }
+
+    public void UpdateContractUI(string id) {
+        // set detail to contract
+        Loan loan = Bank.Instance.loans.Find(item => item.id == id);
+        Text contractText = loan.contractUI.transform.GetChild(0).GetComponent<Text>();
+        contractText.text = "";
+        contractText.text += string.Format("Name: {0} \n", loan.loanProduct.loanName);
+        contractText.text += string.Format("Amount: {0} \n", loan.amount);
+        contractText.text += string.Format("Duration: {0} \n", loan.duration);
+        contractText.text += string.Format("Interest rate: {0} \n", loan.interestRate);
+        contractText.text += string.Format("Bad debt risk: {0} \n\n", loan.badDebtRisk);
+        contractText.text += string.Format("Status: {0} \n", loan.status);
+
+        if (loan.status != LoanStatus.Waiting) {
+            contractText.text += string.Format("Day start: {0} \n", loan.startDay);
+            contractText.text += string.Format("Pay day: {0} \n", loan.payDay);
+        }
+    }
+
+    public void SettleLoanContract() {
+        UpdateContractList();
+        Bank.Instance.loans.RemoveAll(item => item.status == LoanStatus.Reject);
+
+        foreach (var contract in Bank.Instance.loans) {
+            if (contract.status == LoanStatus.Approve) {
+                if (contract.payDay <= TimeSystem.Instance.currentTime) {
+                    // settle up
+                    float payAmount = contract.amount * (1 + (contract.interestRate/100));
+                    Bank.Instance.AddMoney(payAmount);
+                    Bank.Instance.AddCustomerDebt(-contract.amount);
+
+                    // update status to settle
+                    Loan loan = Bank.Instance.loans.Find(item => item.id == contract.id);
+                    loan.status = LoanStatus.Settle;
+                    Destroy(loan.contractUI);
+                }
+            }
+        }
+
+        Bank.Instance.loans.RemoveAll(item => item.status == LoanStatus.Settle);
     }
 }

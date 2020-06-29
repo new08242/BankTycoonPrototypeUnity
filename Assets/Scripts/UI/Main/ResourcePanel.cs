@@ -23,6 +23,8 @@ public class ResourcePanel : MonoBehaviour
     private float currentDisplayCustomerDebt;
     private float currentCustomerDebt;
 
+    public Text monthlyExpense;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,9 +43,12 @@ public class ResourcePanel : MonoBehaviour
         currentCustomerMoney = Bank.Instance.GetCustomerMoney();
         currentCustomerDebt = Bank.Instance.GetCustomerDebt();
 
-        moneyText.text = "฿ " + currentMoney.ToString("n2");
-        customerMoneyText.text = "฿ " + currentCustomerMoney.ToString("n2");
-        customerDebtText.text = "฿ " + currentCustomerDebt.ToString("n2");
+        moneyText.text = "Total Money\n฿ " + currentMoney.ToString("n2");
+        customerMoneyText.text = "Customer Deposit\n฿ " + currentCustomerMoney.ToString("n2");
+        customerDebtText.text = "Customer Debt\n฿ " + currentCustomerDebt.ToString("n2");
+
+        monthlyExpense.text = "Monthly Expense\n฿" + Bank.Instance.monthlyExpense;
+        monthlyExpense.text += "\nAnnually Expense\n฿" + Bank.Instance.annualExpense;
 
         currentDisplayMoney = ShowUpdateMoney(currentDisplayMoney, currentMoney, updateMoneyText);
         currentDisplayCustomerMoney = ShowUpdateMoney(currentDisplayCustomerMoney, currentCustomerMoney, updateCustomerMoneyText);

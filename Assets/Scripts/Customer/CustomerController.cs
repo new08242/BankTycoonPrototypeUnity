@@ -7,23 +7,11 @@ public class CustomerController : MonoBehaviour
     public int population;
     public GameObject customer;
     public GameObject spawnPointPos;
-
-    public static CustomerController Instance {get; private set;}
+    public GameObject leavePosition;
 
     private struct StateToAssign {
         public string state;
         public string nextState;
-    }
-
-    void Awake() {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
     }
 
     // Start is called before the first frame update
@@ -40,6 +28,7 @@ public class CustomerController : MonoBehaviour
         StateToAssign stateToAssign = RandomCustomerState();
         custScript.SetState(stateToAssign.state);
         custScript.nextState = stateToAssign.nextState;
+        custScript.leavePos = leavePosition.transform.position;
 
         yield return new WaitForSeconds(sec);
 

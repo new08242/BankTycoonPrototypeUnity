@@ -9,6 +9,7 @@ public class AccountList : MonoBehaviour
     public Text Name;
     public Text Interest;
     public Text TotalAccount;
+    public Text TotalMoney;
 
     // Update is called once per frame
     void Update()
@@ -21,6 +22,7 @@ public class AccountList : MonoBehaviour
         Name.text = "";
         Interest.text = "";
         TotalAccount.text = "";
+        TotalMoney.text = "";
 
         int num = 0;
         if (Bank.Instance.GetAccountProduct().Count < 1) {
@@ -38,7 +40,10 @@ public class AccountList : MonoBehaviour
             Interest.text += "\n";
 
             TotalAccount.text += product.Value.count.ToString();
-            TotalAccount.text += "\n";  
+            TotalAccount.text += "\n";
+
+            TotalMoney.text += "฿ " + product.Value.totalMoney.ToString("n2");
+            TotalMoney.text += "\n";
         }
     }
 }

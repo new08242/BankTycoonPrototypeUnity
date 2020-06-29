@@ -5,15 +5,23 @@ using UnityEngine;
 public class Bank : MonoBehaviour
 {
     // Player
-    private string mouseState;
+    public string mouseState;
 
     // Resources
-    private float money;
-    private float customerMoney;
-    private float customerDebt;
-    private int atmCount;
-    private int branchCount;
-    private float monthlyExpense;
+    public float money;
+    public float customerMoney;
+    public float customerDebt;
+    public int atmCount;
+    public int branchCount;
+    public int hqCount;
+    public float monthlyExpense;
+    private bool isPaidMonthly = false;
+    public float annualExpense;
+    private bool isPaidAnnually = false;
+
+    // location
+    public KdTree<Transform> branches = new KdTree<Transform>();
+    public KdTree<Transform> atms = new KdTree<Transform>();
 
     // Product
     public Dictionary<string, AccountProduct> accProducts = new Dictionary<string, AccountProduct>();
@@ -25,9 +33,10 @@ public class Bank : MonoBehaviour
     public List<Loan> loans = new List<Loan>();
     public int contractCount = 0;
     public int loanPrdCount = 0;
+    public int loanRunningID = 0;
 
     // Bank abilities
-    private Dictionary<string, bool> bankAbilities = new Dictionary<string, bool>();
+    public Dictionary<string, bool> bankAbilities = new Dictionary<string, bool>();
 
     // Singleton instance
     public static Bank Instance { get; private set; }
@@ -183,6 +192,47 @@ public class Bank : MonoBehaviour
     }
 
     void CalculateExpense() {
-        
+        float totalExpense = 0;
+        totalExpense += hqCount*100000;
+        totalExpense += atmCount*1000;
+        totalExpense += branchCount*10000;
+        totalExpense += (accountCount+accPrdCount+loanPrdCount+loans.Count)*3;
+
+        monthlyExpense = totalExpense;
+
+        // monthly expense
+        if ((int)TimeSystem.Instance.currentTime % 30 == 0) {
+            if (!isPaidMonthly) {
+                Debug.Log("Paid monthly");
+                money -= monthlyExpense;
+                isPaidMonthly = true;
+            }
+        }
+
+        // set not paid
+        if ((int)TimeSystem.Instance.currentTime % 30 == 1) {
+            isPaidMonthly = false;
+        }
+
+        totalExpense = 0;
+        foreach (var accPrd in accProducts) {
+            totalExpense += accPrd.Value.totalMoney * (accPrd.Value.interestRate/100);
+        }
+
+        annualExpense = totalExpense;
+
+        // annual expense
+        if ((int)TimeSystem.Instance.currentTime % 365 == 0) {
+            if (!isPaidAnnually) {
+                Debug.Log("Paid annually:" + annualExpense);
+                money -= annualExpense;
+                isPaidAnnually = true;
+            }
+        }
+
+        // set not paid
+        if ((int)TimeSystem.Instance.currentTime % 365 == 1) {
+            isPaidAnnually = false;
+        }
     }
 }

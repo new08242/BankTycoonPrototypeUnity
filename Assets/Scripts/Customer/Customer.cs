@@ -10,10 +10,10 @@ public class Customer : MonoBehaviour
     public RuntimeAnimatorController IdleAmination;
     public RuntimeAnimatorController WalkAnimation;
     private Animator animator;
-    private GameObject nearestBank;
-    private GameObject nearestATM;
+    private Transform nearestBank;
+    private Transform nearestATM;
     public GameObject stateIndicator;
-    private Vector3 leavePos;
+    public Vector3 leavePos;
     private string state;
     private string previousState;
     public string nextState;
@@ -35,15 +35,15 @@ public class Customer : MonoBehaviour
         animator = this.GetComponent<Animator>();
         animator.runtimeAnimatorController = IdleAmination;
 
-        leavePos = GameObject.Find("CustomerLeavePosition").transform.position;
-        nearestBank = GameObject.FindGameObjectWithTag("Branch");
-        nearestATM = GameObject.FindGameObjectWithTag("ATM");
+        nearestBank = Bank.Instance.branches.FindClosest(transform.position);
+        nearestATM = Bank.Instance.atms.FindClosest(transform.position);
     }
 
     // Update is called once per frame
     void Update()
     {
         stateIndicator.transform.GetChild(1).GetComponent<Text>().text = state;
+
         switch (state) 
         {
         case "":
@@ -125,12 +125,13 @@ public class Customer : MonoBehaviour
 
             // create bank account
             int randAmount = Random.Range(1000, 30001);
-            int randAccPrd = Random.Range(1, Bank.Instance.GetAccountProduct().Count);
+            int randAccPrd = Random.Range(1, Bank.Instance.GetAccountProduct().Count+1);
             Account acc = new Account(Bank.Instance.GetAccountProduct()[randAccPrd.ToString()], custName, randAmount);
             Bank.Instance.AddAccount(acc);
             
             Bank.Instance.AddMoney(randAmount);
             Bank.Instance.AddCustomerMoney(randAmount);
+            Bank.Instance.GetAccountProduct()[randAccPrd.ToString()].totalMoney += randAmount;
 
             previousState = state;
             state = CustomerState.IdelState;
@@ -147,16 +148,25 @@ public class Customer : MonoBehaviour
         animator.runtimeAnimatorController = WalkAnimation;
         navMeshAgent.SetDestination(bankATMDestination);
         if (Mathf.Abs(gameObject.transform.position.x - bankATMDestination.x) <= 0.1) {
-            float randResult = Random.Range(100, 10001);
+            float randAmount = Random.Range(100, 10001);
             
-            if (Bank.Instance.GetCustomerMoney() < randResult) {
+            if (Bank.Instance.GetCustomerMoney() < randAmount) {
                 previousState = state;
                 state = CustomerState.DepositState;
                 return;
             }
+
+            int randAccPrd = Random.Range(1, Bank.Instance.GetAccountProduct().Count+1);
             
-            Bank.Instance.AddMoney(-randResult);
-            Bank.Instance.AddCustomerMoney(-randResult);
+            Bank.Instance.AddMoney(-randAmount);
+            Bank.Instance.AddCustomerMoney(-randAmount);
+
+            if (Bank.Instance.GetAccountProduct()[randAccPrd.ToString()].totalMoney < randAmount) {
+                previousState = state;
+                state = CustomerState.DepositState;
+                return;
+            }
+            Bank.Instance.GetAccountProduct()[randAccPrd.ToString()].totalMoney -= randAmount;
 
             previousState = state;
             state = CustomerState.IdelState;
@@ -183,22 +193,20 @@ public class Customer : MonoBehaviour
         if (Mathf.Abs(gameObject.transform.position.x - loanDestination.x) <= 0.1) {
             
             int randAmount = Random.Range(10000, 300001);
-            // Bank.Instance.AddMoney(-randAmount);
-            // Bank.Instance.AddCustomerDebt(randAmount);
 
             // create loan contract
             int randLoanPrd = Random.Range(1, Bank.Instance.loanProducts.Count);
-
-            int randPayDay = Random.Range(15, 61);
-            float stDay = TimeSystem.Instance.currentTime;
-            float payDay = TimeSystem.Instance.currentTime + randPayDay;
-
+            int randDuration = Random.Range(15, 61);
             int randBadDepRisk = Random.Range(1, 11);
 
-            Loan loan = new Loan(Bank.Instance.loanProducts[randLoanPrd.ToString()], (int)stDay, (int)payDay, randBadDepRisk, randAmount);
-            loan.contractUI = ContractManager.Instance.CreateContractUI();
+            Loan loan = new Loan(Bank.Instance.loanProducts[randLoanPrd.ToString()], (int)randDuration, randBadDepRisk, randAmount, Bank.Instance.loanProducts[randLoanPrd.ToString()].interestRate);
+            loan.contractUI = ContractManager.Instance.CreateContractUI(loan);
+            loan.contractUI.GetComponent<ContractUI>().id = loan.id;
+
             Bank.Instance.loans.Add(loan);
             Bank.Instance.loanProducts[randLoanPrd.ToString()].totalContract++;
+
+            ContractManager.Instance.UpdateContractList();
 
             previousState = state;
             state = CustomerState.IdelState;
