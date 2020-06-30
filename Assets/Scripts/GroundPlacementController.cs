@@ -8,6 +8,7 @@ public class GroundPlacementController : MonoBehaviour
 
     // private GameObject currentPlaceableObject;
     private GameObject currentPlaceableObject;
+    public GameObject cannotPlaceBanner;
 
     private float mouseWheelRotation;
     // private int currentPrefabIndex = -1;
@@ -19,7 +20,7 @@ public class GroundPlacementController : MonoBehaviour
         if (currentPlaceableObject != null)
         {
             MoveCurrentObjectToMouse();
-            RotateFromMouseWheel();
+            // RotateFromMouseWheel();
             // ReleaseIfClicked();
         }
     }
@@ -65,24 +66,33 @@ public class GroundPlacementController : MonoBehaviour
         {
             currentPlaceableObject.transform.position = hitInfo.point;
             currentPlaceableObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+
+            mouseWheelRotation += Input.mouseScrollDelta.y;
+            currentPlaceableObject.transform.Rotate(Vector3.up, mouseWheelRotation * 10f);
             
             if (Input.GetMouseButtonDown(0))
             {
                 PlaceableObject placeableObjectScript = currentPlaceableObject.GetComponent<PlaceableObject>();
-                if (placeableObjectScript.IsPlaceable() && hitInfo.transform.gameObject.layer == 8)
+                if (placeableObjectScript.IsPlaceable() && hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Owned"))
                 {
                     placeableObjectScript.Purchase();
                     currentPlaceableObject = null;
+                }
+                else {
+                    GameObject banner = Instantiate(cannotPlaceBanner);
+                    banner.transform.SetParent(currentPlaceableObject.transform);
+                    // Vector3 objPos = currentPlaceableObject.transform.position;
+                    banner.transform.localPosition = new Vector3(0, 3, 0);
                 }
             }
         }
     }
 
-    private void RotateFromMouseWheel()
-    {
-        mouseWheelRotation += Input.mouseScrollDelta.y;
-        currentPlaceableObject.transform.Rotate(Vector3.up, mouseWheelRotation * 10f);
-    }
+    // private void RotateFromMouseWheel()
+    // {
+    //     mouseWheelRotation += Input.mouseScrollDelta.y;
+    //     currentPlaceableObject.transform.Rotate(Vector3.up, mouseWheelRotation * 10f);
+    // }
 
     // private void ReleaseIfClicked()
     // {

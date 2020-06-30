@@ -58,14 +58,14 @@ public class TooltipPopup : MonoBehaviour
         // builder.Append(item.GetTooltipInfoText());
 
         // infoText.text = builder.ToString();
-        infoText.text = "Requirements\nemployee: 30\nmoney: 5,000,000\ntime: 200";
-
+        
         popupCanvasObject.SetActive(true);
         LayoutRebuilder.ForceRebuildLayoutImmediate(popupObject);
     }
 
     public void HideInfo()
     {
+
         popupCanvasObject.SetActive(false);
     }
 

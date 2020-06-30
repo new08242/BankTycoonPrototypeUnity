@@ -193,7 +193,7 @@ public class Bank : MonoBehaviour
 
     void CalculateExpense() {
         float totalExpense = 0;
-        totalExpense += hqCount*100000;
+        totalExpense += hqCount*50000;
         totalExpense += atmCount*1000;
         totalExpense += branchCount*10000;
         totalExpense += (accountCount+accPrdCount+loanPrdCount+loans.Count)*3;
@@ -203,7 +203,7 @@ public class Bank : MonoBehaviour
         // monthly expense
         if ((int)TimeSystem.Instance.currentTime % 30 == 0) {
             if (!isPaidMonthly) {
-                Debug.Log("Paid monthly");
+                Debug.Log("Paid monthly: " + monthlyExpense);
                 money -= monthlyExpense;
                 isPaidMonthly = true;
             }
@@ -224,7 +224,7 @@ public class Bank : MonoBehaviour
         // annual expense
         if ((int)TimeSystem.Instance.currentTime % 365 == 0) {
             if (!isPaidAnnually) {
-                Debug.Log("Paid annually:" + annualExpense);
+                Debug.Log("Paid annually: " + annualExpense);
                 money -= annualExpense;
                 isPaidAnnually = true;
             }

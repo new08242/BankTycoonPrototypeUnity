@@ -6,4 +6,5 @@ public static class BankAbility {
     public const string ATM = "atm";
     public const string Deposit = "deposit";
     public const string Withdraw = "withdraw";
+    public const string HR = "hr";
 }

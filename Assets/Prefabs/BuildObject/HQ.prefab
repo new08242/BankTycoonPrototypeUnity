@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7723042114780142714}
   - component: {fileID: -1778282427662062267}
   m_Layer: 0
-  m_Name: software_company_mobile
+  m_Name: HQ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,8 +117,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead06123326ab4d4ba6af7533d676b23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBank: {fileID: 726742792589931820, guid: bd1ba69a411d7814da94779d97a97ac5,
-    type: 3}
-  playerBankScript: {fileID: 726742792589931818, guid: bd1ba69a411d7814da94779d97a97ac5,
-    type: 3}
-  price: 10000000
+  price: 5000000
+  monthlyExpense: 0

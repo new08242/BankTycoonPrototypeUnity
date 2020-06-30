@@ -29,7 +29,6 @@ public class Customer : MonoBehaviour
     void Start()
     {
         GameObject eventCam = GameObject.Find("Camera Rig").transform.GetChild(0).gameObject;
-        stateIndicator.GetComponent<Canvas>().worldCamera = eventCam.GetComponent<Camera>();
         stateIndicator.transform.GetChild(1).GetComponent<Text>().text = state;
 
         animator = this.GetComponent<Animator>();
@@ -192,19 +191,19 @@ public class Customer : MonoBehaviour
         navMeshAgent.SetDestination(loanDestination);
         if (Mathf.Abs(gameObject.transform.position.x - loanDestination.x) <= 0.1) {
             
-            int randAmount = Random.Range(10000, 300001);
-
             // create loan contract
             int randLoanPrd = Random.Range(1, Bank.Instance.loanProducts.Count);
-            int randDuration = Random.Range(15, 61);
+            LoanProduct loprd = Bank.Instance.loanProducts[randLoanPrd.ToString()];
+            int randAmount = Random.Range((int)loprd.minAmount, (int)loprd.maxAmount);
+            int randDuration = Random.Range(15, 31);
             int randBadDepRisk = Random.Range(1, 11);
 
-            Loan loan = new Loan(Bank.Instance.loanProducts[randLoanPrd.ToString()], (int)randDuration, randBadDepRisk, randAmount, Bank.Instance.loanProducts[randLoanPrd.ToString()].interestRate);
+            Loan loan = new Loan(loprd, (int)randDuration, randBadDepRisk, randAmount, loprd.interestRate);
             loan.contractUI = ContractManager.Instance.CreateContractUI(loan);
             loan.contractUI.GetComponent<ContractUI>().id = loan.id;
 
             Bank.Instance.loans.Add(loan);
-            Bank.Instance.loanProducts[randLoanPrd.ToString()].totalContract++;
+            loprd.totalContract++;
 
             ContractManager.Instance.UpdateContractList();
 

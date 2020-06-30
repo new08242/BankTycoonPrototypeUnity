@@ -90,7 +90,7 @@ public class ContractManager : MonoBehaviour
         Text contractText = c.transform.GetChild(0).GetComponent<Text>();
         contractText.text = "";
         contractText.text += string.Format("Name: {0} \n", loan.loanProduct.loanName);
-        contractText.text += string.Format("Amount: {0} \n", loan.amount);
+        contractText.text += string.Format("Amount: {0} \n", loan.amount.ToString("n2"));
         contractText.text += string.Format("Duration: {0} \n", loan.duration);
         contractText.text += string.Format("Interest rate: {0} \n", loan.interestRate);
         contractText.text += string.Format("Bad debt risk: {0} \n\n", loan.badDebtRisk);
@@ -105,7 +105,7 @@ public class ContractManager : MonoBehaviour
         Text contractText = loan.contractUI.transform.GetChild(0).GetComponent<Text>();
         contractText.text = "";
         contractText.text += string.Format("Name: {0} \n", loan.loanProduct.loanName);
-        contractText.text += string.Format("Amount: {0} \n", loan.amount);
+        contractText.text += string.Format("Amount: {0} \n", loan.amount.ToString("n2"));
         contractText.text += string.Format("Duration: {0} \n", loan.duration);
         contractText.text += string.Format("Interest rate: {0} \n", loan.interestRate);
         contractText.text += string.Format("Bad debt risk: {0} \n\n", loan.badDebtRisk);
