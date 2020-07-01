@@ -1,16 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class BuyLand : MonoBehaviour
 {
     public GameObject land;
     public GameObject customerSpawn;
+    public float price;
+    public Text priceText;
+
+    void Start() {
+        priceText.text = string.Format("{0} ฿", price.ToString("n0"));
+    }
 
     public void Buy() {
-        if (Bank.Instance.money < 5000000) { return; }
+        if (Bank.Instance.money < price) { return; }
 
-        Bank.Instance.money -= 5000000;
+        Bank.Instance.money -= price;
         land.layer = LayerMask.NameToLayer("Owned");
         customerSpawn.SetActive(true);
         Destroy(this.gameObject);

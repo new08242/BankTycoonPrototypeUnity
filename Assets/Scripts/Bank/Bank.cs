@@ -19,6 +19,9 @@ public class Bank : MonoBehaviour
     public float annualExpense;
     private bool isPaidAnnually = false;
 
+    public int employeeCount;
+    public List<Employee> employees = new List<Employee>();
+
     // location
     public KdTree<Transform> branches = new KdTree<Transform>();
     public KdTree<Transform> atms = new KdTree<Transform>();
@@ -73,6 +76,7 @@ public class Bank : MonoBehaviour
         // }
 
         CalculateExpense();
+        AutoApproveLoanContract();
     }
 
     public string GetMouseState() {
@@ -196,6 +200,7 @@ public class Bank : MonoBehaviour
         totalExpense += hqCount*50000;
         totalExpense += atmCount*1000;
         totalExpense += branchCount*10000;
+        totalExpense += employeeCount*15000;
         totalExpense += (accountCount+accPrdCount+loanPrdCount+loans.Count)*3;
 
         monthlyExpense = totalExpense;
@@ -233,6 +238,24 @@ public class Bank : MonoBehaviour
         // set not paid
         if ((int)TimeSystem.Instance.currentTime % 365 == 1) {
             isPaidAnnually = false;
+        }
+    }
+
+    public void AutoApproveLoanContract() {
+        if (!Bank.Instance.GetAbilityByKey(BankAbility.Loan)) { return; }
+        if (Bank.Instance.employees.Count < 1) { return; }
+
+        if ((int)TimeSystem.Instance.currentTime%3 == 0) {
+            foreach (var em in employees) {
+                int count = 0;
+                foreach (var loan in loans) {
+                    if (count >= 5) { break; }
+                    if (loan.status == LoanStatus.Waiting) { 
+                        loan.contractUI.GetComponent<ContractUI>().Approve();
+                        count++;
+                    }
+                }
+            }
         }
     }
 }

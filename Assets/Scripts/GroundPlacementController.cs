@@ -3,15 +3,24 @@ using UnityEngine;
 
 public class GroundPlacementController : MonoBehaviour
 {
-    // [SerializeField]
-    // private GameObject[] placeableObjectPrefabs;
-
-    // private GameObject currentPlaceableObject;
     private GameObject currentPlaceableObject;
     public GameObject cannotPlaceBanner;
 
     private float mouseWheelRotation;
-    // private int currentPrefabIndex = -1;
+
+    public static GroundPlacementController Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Update()
     {
@@ -20,8 +29,6 @@ public class GroundPlacementController : MonoBehaviour
         if (currentPlaceableObject != null)
         {
             MoveCurrentObjectToMouse();
-            // RotateFromMouseWheel();
-            // ReleaseIfClicked();
         }
     }
 
@@ -87,25 +94,6 @@ public class GroundPlacementController : MonoBehaviour
             }
         }
     }
-
-    // private void RotateFromMouseWheel()
-    // {
-    //     mouseWheelRotation += Input.mouseScrollDelta.y;
-    //     currentPlaceableObject.transform.Rotate(Vector3.up, mouseWheelRotation * 10f);
-    // }
-
-    // private void ReleaseIfClicked()
-    // {
-    //     if (Input.GetMouseButtonDown(0))
-    //     {
-    //         PlaceableObject placeableObjectScript = currentPlaceableObject.GetComponent<PlaceableObject>();
-    //         if (placeableObjectScript.IsPlaceable())
-    //         {
-    //             placeableObjectScript.Purchase();
-    //             currentPlaceableObject = null;
-    //         }
-    //     }
-    // }
 
     public void SetCurrentPlaceableObject(GameObject placeableObject) {
         if (placeableObject == null) {

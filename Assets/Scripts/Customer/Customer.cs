@@ -215,7 +215,7 @@ public class Customer : MonoBehaviour
     void PayLoan() {
         animator.runtimeAnimatorController = WalkAnimation;
         navMeshAgent.SetDestination(loanDestination);
-        if (Mathf.Abs(gameObject.transform.position.x - loanDestination.x) <= 0.1) {
+        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, loanDestination)) <= 0.1) {
             float randResult = Random.Range(10000, 300001);
             Bank.Instance.AddMoney(randResult);
             Bank.Instance.AddCustomerDebt(-randResult);
