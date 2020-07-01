@@ -251,8 +251,10 @@ public class Bank : MonoBehaviour
                 foreach (var loan in loans) {
                     if (count >= 5) { break; }
                     if (loan.status == LoanStatus.Waiting) { 
-                        loan.contractUI.GetComponent<ContractUI>().Approve();
-                        count++;
+                        if (money > loan.amount) {
+                            loan.contractUI.GetComponent<ContractUI>().Approve();
+                            count++;
+                        }
                     }
                 }
             }

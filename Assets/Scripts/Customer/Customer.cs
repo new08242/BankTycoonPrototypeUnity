@@ -41,6 +41,7 @@ public class Customer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // float dist = Mathf.Abs(Vector3.Distance(gameObject.transform.position, loanDestination));
         stateIndicator.transform.GetChild(1).GetComponent<Text>().text = state;
 
         switch (state) 
@@ -77,7 +78,7 @@ public class Customer : MonoBehaviour
         }
     }
 
-    // TODO: Need refactor, Infinite state machine pattern 
+    // TODO: Need refactor to Infinite state machine pattern 
     // and made destination dynamic in list and random within the list
     void DecideBankDestination(string nextState) {
         // decide deposit
@@ -120,7 +121,7 @@ public class Customer : MonoBehaviour
 
         animator.runtimeAnimatorController = WalkAnimation;
         navMeshAgent.SetDestination(bankATMDestination);
-        if (Mathf.Abs(gameObject.transform.position.x - bankATMDestination.x) <= 0.1) {
+        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, bankATMDestination)) <= 2) {
 
             // create bank account
             int randAmount = Random.Range(1000, 30001);
@@ -144,9 +145,15 @@ public class Customer : MonoBehaviour
             return;
         }
 
+        if (Bank.Instance.GetCustomerMoney() < 100000) {
+            previousState = state;
+            state = CustomerState.DepositState;
+            return;
+        }
+
         animator.runtimeAnimatorController = WalkAnimation;
         navMeshAgent.SetDestination(bankATMDestination);
-        if (Mathf.Abs(gameObject.transform.position.x - bankATMDestination.x) <= 0.1) {
+        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, bankATMDestination)) <= 2) {
             float randAmount = Random.Range(100, 10001);
             
             if (Bank.Instance.GetCustomerMoney() < randAmount) {
@@ -174,7 +181,7 @@ public class Customer : MonoBehaviour
 
     void DecideLoanDestination(string nextState) {
         // decide deposit
-        if (Bank.Instance.GetAbilityByKey(BankAbility.Loan)) {
+        if (Bank.Instance.GetAbilityByKey(BankAbility.LoanContract)) {
             loanDestination = nearestBank.transform.position;
 
             previousState = state;
@@ -189,10 +196,10 @@ public class Customer : MonoBehaviour
     void Loan() {
         animator.runtimeAnimatorController = WalkAnimation;
         navMeshAgent.SetDestination(loanDestination);
-        if (Mathf.Abs(gameObject.transform.position.x - loanDestination.x) <= 0.1) {
+        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, loanDestination)) <= 2) {
             
             // create loan contract
-            int randLoanPrd = Random.Range(1, Bank.Instance.loanProducts.Count);
+            int randLoanPrd = Random.Range(1, Bank.Instance.loanProducts.Count+1);
             LoanProduct loprd = Bank.Instance.loanProducts[randLoanPrd.ToString()];
             int randAmount = Random.Range((int)loprd.minAmount, (int)loprd.maxAmount);
             int randDuration = Random.Range(15, 31);
@@ -215,7 +222,7 @@ public class Customer : MonoBehaviour
     void PayLoan() {
         animator.runtimeAnimatorController = WalkAnimation;
         navMeshAgent.SetDestination(loanDestination);
-        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, loanDestination)) <= 0.1) {
+        if (Mathf.Abs(Vector3.Distance(gameObject.transform.position, loanDestination)) <= 2) {
             float randResult = Random.Range(10000, 300001);
             Bank.Instance.AddMoney(randResult);
             Bank.Instance.AddCustomerDebt(-randResult);

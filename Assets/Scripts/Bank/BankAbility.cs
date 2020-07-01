@@ -3,6 +3,7 @@ public static class BankAbility {
     public const string Build = "build";
     public const string Account = "account";
     public const string Loan = "loan";
+    public const string LoanContract = "loanContract";
     public const string ATM = "atm";
     public const string Deposit = "deposit";
     public const string Withdraw = "withdraw";

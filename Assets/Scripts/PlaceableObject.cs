@@ -33,20 +33,20 @@ public class PlaceableObject : MonoBehaviour
             break;
         case "Branch":
             Bank.Instance.SetAbility(BankAbility.Account, true);
-            Bank.Instance.SetAbility(BankAbility.Deposit, true);
-            Bank.Instance.SetAbility(BankAbility.Withdraw, true);
+            // Bank.Instance.SetAbility(BankAbility.Deposit, true);
+            // Bank.Instance.SetAbility(BankAbility.Withdraw, true);
             Bank.Instance.SetAbility(BankAbility.Loan, true);
             Bank.Instance.branchCount++;
             Bank.Instance.branches.Add(transform);
 
             // auto create basic loan
-            Bank.Instance.loanPrdCount++;
-            LoanProduct lp = new LoanProduct("BasicLoan", 100000f, 1000000f, 20f, Bank.Instance.loanPrdCount.ToString());
-            Bank.Instance.AddLoanProduct(lp);
+            // Bank.Instance.loanPrdCount++;
+            // LoanProduct lp = new LoanProduct("BasicLoan", 100000f, 1000000f, 20f, Bank.Instance.loanPrdCount.ToString());
+            // Bank.Instance.AddLoanProduct(lp);
 
-            Bank.Instance.accPrdCount++;
-            AccountProduct acc = new AccountProduct("Saving", 2f, "BasicAccount", Bank.Instance.accPrdCount.ToString());
-            Bank.Instance.AddAccountProduct(acc);
+            // Bank.Instance.accPrdCount++;
+            // AccountProduct acc = new AccountProduct("Saving", 2f, "BasicAccount", Bank.Instance.accPrdCount.ToString());
+            // Bank.Instance.AddAccountProduct(acc);
 
             break;
         case "HQ":
