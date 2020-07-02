@@ -2,10 +2,6 @@
 
 public class GamePlayCameraController : MonoBehaviour
 {
-
-    public GameObject groundPlacementController;
-    private GroundPlacementController gpcScript;
-
     public Transform cameraTransform;
 
     public float normalSpeed;
@@ -31,10 +27,9 @@ public class GamePlayCameraController : MonoBehaviour
         newPosition = transform.position;
         newRotation = transform.rotation;
         newZoom = cameraTransform.localPosition;
-
-        gpcScript = groundPlacementController.GetComponent<GroundPlacementController>();
     }
 
+    // TODO: rafactor to state machine pattern
     // Update is called once per frame
     void Update()
     {
@@ -46,7 +41,7 @@ public class GamePlayCameraController : MonoBehaviour
 
     void HandleMouseInput()
     {
-        if(Input.mouseScrollDelta.y != 0 && gpcScript.GetCurrentPlaceableObject() == null)
+        if(Input.mouseScrollDelta.y != 0 && PlayerInputController.Instance.GetCurrentPlaceableObject() == null)
         {
             newZoom += Input.mouseScrollDelta.y * zoomAmount;
         }

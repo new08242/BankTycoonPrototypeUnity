@@ -27,6 +27,6 @@ public class BuildPanel : MonoBehaviour, IPointerEnterHandler
     }
 
     public void OnPointerEnter(PointerEventData eventData){
-        GroundPlacementController.Instance.SetCurrentPlaceableObject(null);
+        PlayerInputController.Instance.SetCurrentPlaceableObject(null);
     }
 }

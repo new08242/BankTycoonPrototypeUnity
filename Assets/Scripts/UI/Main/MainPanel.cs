@@ -6,6 +6,7 @@ public class MainPanel : MonoBehaviour
     public GameObject productPanel;
     public GameObject hrPanel;
     public GameObject researchPanel;
+    public GameObject pausePanel;
   
     public void OnClickBuild() {
         gameObject.SetActive(false);

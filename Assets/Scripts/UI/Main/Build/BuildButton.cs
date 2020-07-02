@@ -25,6 +25,6 @@ public class BuildButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnClick() {
-        GroundPlacementController.Instance.SetCurrentPlaceableObject(buildPrefab);
+        PlayerInputController.Instance.SetCurrentPlaceableObject(buildPrefab);
     }
 }

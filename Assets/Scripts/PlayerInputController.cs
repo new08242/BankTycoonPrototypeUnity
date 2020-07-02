@@ -1,14 +1,14 @@
 ﻿using System;
 using UnityEngine;
 
-public class GroundPlacementController : MonoBehaviour
+public class PlayerInputController : MonoBehaviour
 {
     private GameObject currentPlaceableObject;
     public GameObject cannotPlaceBanner;
 
     private float mouseWheelRotation;
 
-    public static GroundPlacementController Instance { get; private set; }
+    public static PlayerInputController Instance { get; private set; }
 
     void Awake()
     {
@@ -22,6 +22,7 @@ public class GroundPlacementController : MonoBehaviour
         }
     }
 
+    // TODO: rafactor to state machine pattern
     private void Update()
     {
         // HandleNewObjectHotkey();
