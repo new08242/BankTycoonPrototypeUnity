@@ -45,6 +45,7 @@ public class TimeSystem : MonoBehaviour
     }
 
     public void Slower() {
+        if ((Time.timeScale - 0.5f) <= 0) { return; }
         Time.timeScale -= 0.5f;
     }
 
