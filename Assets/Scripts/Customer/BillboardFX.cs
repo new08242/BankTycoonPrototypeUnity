@@ -14,6 +14,7 @@ public class BillboardFX : MonoBehaviour
         camTransform = GameObject.Find("Camera Rig").transform.GetChild(0).transform;
         this.gameObject.GetComponent<Canvas>().worldCamera = camTransform.GetComponent<Camera>();
         originalRotation = transform.rotation;
+        transform.rotation = camTransform.rotation * originalRotation;
     }
 
     void Update()
